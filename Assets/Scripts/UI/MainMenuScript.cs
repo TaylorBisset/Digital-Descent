@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MainMenuScript : MonoBehaviour
 {
@@ -18,6 +19,11 @@ public class MainMenuScript : MonoBehaviour
     {
         mainMenu.SetActive(false);  // Hide Main Menu
         levelSelectMenu.SetActive(true);    // Show Level Select Menu
+    }
+
+    public void LoadLevel(int levelIndex)
+    {
+        SceneManager.LoadScene(levelIndex); // Load level based on index: currently, levels are same as index, as main menu scene is indexed at 0
     }
 
     public void BackToMainMenu()
