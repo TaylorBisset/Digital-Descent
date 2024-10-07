@@ -10,7 +10,16 @@ public class MainMenuScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        // Ensure that Main Menu is active upon game starting
+        // Ensure that Level Select Menu is hidden when game sarts
+        mainMenu.SetActive(true);
+        levelSelectMenu.SetActive(false);
+    }
+
+    public void PlayGame()
+    {
+        mainMenu.SetActive(false);
+        levelSelectMenu.SetActive(true);
     }
 
     public void QuitGame()
