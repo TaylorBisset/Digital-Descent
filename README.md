@@ -2,10 +2,10 @@
 A 2D educational puzzle game for learning programming basics (Python) <br> 
 Honors Capstone project at Everett Community College 
 
-# Project Overview
+## Project Overview
 This project is a simple educational game that introduces fundamental Python programming concepts through interactive puzzles. 
 Players explore a 2D top-down game world and solve coding challenges using an in-game Integrated Development Environment (IDE). 
-This project's primary focus is on developing a Minimum Viable Product (MVP) that demonstrates key computer science principles. 
+This project focuses on developing a Minimum Viable Product (MVP) that demonstrates key computer science principles. 
 
 ## Gameplay Features 
 - 2D top-down game world
