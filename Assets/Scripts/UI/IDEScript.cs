@@ -22,4 +22,9 @@ public class IDEScript : MonoBehaviour
     {
         idePanel.SetActive(false);  // Hides the Settings Menu
     }
+
+    public void RunCode()
+    {
+
+    }
 }
