@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class IDEScript : MonoBehaviour
 {
     public GameObject ideButton;   // References the Settings Button
     public GameObject idePanel; // References the Settings Menu
+    public TMP_InputField inputField;   // Reference IDE Input Field
+    public TMP_Text outputText;   // Reference IDE output text
 
     // Start is called before the first frame update
     void Start()
@@ -23,8 +27,15 @@ public class IDEScript : MonoBehaviour
         idePanel.SetActive(false);  // Hides the Settings Menu
     }
 
-    public void RunCode()
+    public void ExecuteCode()
     {
+        // Get text from the input field
+        string userInput = inputField.text;
 
+        if (userInput.StartsWith("print(") && userInput.EndsWith(")"))  // check for print()
+        {
+            // Extract the content inside the print() command
+            string content = userInput.Substring(6, userInput.Length - 7).Trim();   // Trim the starting 'print(' and the ending ')'
+        }
     }
 }
