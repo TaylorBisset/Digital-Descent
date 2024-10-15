@@ -30,18 +30,28 @@ public class IDEScript : MonoBehaviour
     public void ExecuteCode()
     {
         // Get text from the input field
-        string userInput = inputField.text;
+        string[] userInputLines = inputField.text.Trim().Split('\n');   // split input into lines
+        string output = ""; // Initialize an empty string for output
 
-        if (userInput.StartsWith("print(") && userInput.EndsWith(")"))  // check for print()
+        // Process each line of input
+        foreach (string line in userInputLines) 
         {
-            // Extract the content inside the print() command
-            string content = userInput.Substring(6, userInput.Length - 7).Trim();   // Trim the starting 'print(' and the ending ')'
-
-            if (content.StartsWith("\"") && content.EndsWith("\"")) // Check if the user's content is a string
+            if (line.StartsWith("print(") && line.EndsWith(")"))    // check for print()
             {
-                outputText.text = content.Trim('\"'); // Output the string directly by removing the quotes
+                // Extract the content inside the print() command
+                string content = line.Substring(6, line.Length - 7).Trim(); // Trim the starting 'print(' and the ending ')'
+
+                if (content.StartsWith("\"") && content.EndsWith("\"")) // Check if the user's content is a string
+                {
+                    output += content.Trim('\"') + "\n";    // Output the string directly by removing the quotes
+                }
+            }
+            else
+            {
+                output += "Error: Invalid format or command.\n";
             }
         }
+        outputText.text = output.Trim();
     }
 
 }
