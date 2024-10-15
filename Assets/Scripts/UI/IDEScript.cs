@@ -36,6 +36,12 @@ public class IDEScript : MonoBehaviour
         {
             // Extract the content inside the print() command
             string content = userInput.Substring(6, userInput.Length - 7).Trim();   // Trim the starting 'print(' and the ending ')'
+
+            if (content.StartsWith("\"") && content.EndsWith("\"")) // Check if the user's content is a string
+            {
+                outputText.text = content.Trim('\"'); // Output the string directly by removing the quotes
+            }
         }
     }
+
 }
