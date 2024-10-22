@@ -22,25 +22,12 @@ public class IDEScript : MonoBehaviour
         idePanel.SetActive(true);   // Shows the Settings Menu
     }
 
-    public void CloseIDE()
+    // - - - - - Banner - - - - - //
+
+    public void CloseIDE() 
     {
         idePanel.SetActive(false);  // Hides the Settings Menu
     }
-
-    public void PrintFunctionButton()
-    {
-        // when button is pressed, print function is added to the user input field
-        inputField.text += "\nprint(\"Hello, World!\")";
-
-    }
-
-    public void PrintFunctionVariableButton()
-    {
-        // when button is pressed, print function is added to the user input field
-        inputField.text += "\nmessage = \"Hello, World!\"\nprint(message)";
-        
-    }
-
     public void ExecuteCode()
     {
         // Get text from the input field
@@ -48,7 +35,7 @@ public class IDEScript : MonoBehaviour
         string output = ""; // Initialize an empty string for output
 
         // Process each line of input
-        foreach (string line in userInputLines) 
+        foreach (string line in userInputLines)
         {
             if (line.StartsWith("print(") && line.EndsWith(")"))    // check for print()
             {
@@ -66,6 +53,22 @@ public class IDEScript : MonoBehaviour
             }
         }
         outputText.text = output.Trim();
+    }
+
+    // - - - - - Library - - - - - //
+
+    public void PrintFunctionButton()
+    {
+        // when button is pressed, print function is added to the user input field
+        inputField.text += "\nprint(\"Hello, World!\")";
+
+    }
+
+    public void PrintFunctionVariableButton()
+    {
+        // when button is pressed, print function is added to the user input field
+        inputField.text += "\nmessage = \"Hello, World!\"\nprint(message)";
+        
     }
 
 }
