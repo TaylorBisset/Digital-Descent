@@ -52,19 +52,23 @@ public class IDEScript : MonoBehaviour
                 string[] parts = line.Split('=');   // create dictionary for variable assignment
                 if (parts.Length == 2)
                 {
-                    string variableName = parts[0].Trim(); // variable name
-                    string variableValue = parts[1].Trim(); // variable value
+                    string variableName = parts[0].Trim(); // variable name, trim spaces
+                    string variableValue = parts[1].Trim(); // variable value, trim spaces
 
                     // check if value is a string
                     if (variableValue.StartsWith("\"") && variableValue.EndsWith("\""))
                     {
-                        variableName = variableValue.Trim('\"'); // remove quotes
+                        variableValue = variableValue.Trim('\"'); // remove quotes
                         variables[variableName] = variableValue; // store variable in dictionary
                     }
                     else
                     {
-                        output += $"Error: Invalid value for variable {variableName}\n";
+                        output += $"Error: Invalid value for variable \"{variableName}\".\n";
                     }
+                }
+                else
+                {
+                    output += "Error: Invalid assignment format.\n";
                 }
             }
 
@@ -78,13 +82,15 @@ public class IDEScript : MonoBehaviour
                 {
                     output += content.Trim('\"') + "\n";    // Output the string directly by removing the quotes
                 }
+
                 else if (variables.ContainsKey(content))
                 {
                     output += variables[content] + "\n"; // Output variable value
                 }
+
                 else
                 {
-                    output += $"Error: Undefined variable {content}\n";
+                    output += $"Error: Undefined variable \"{content}\".\n";
                 }
             }
 
