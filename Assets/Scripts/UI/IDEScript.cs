@@ -12,7 +12,7 @@ public class IDEScript : MonoBehaviour
     public TMP_Text outputText;   // Reference IDE output text
 
     // dictionary to hold variables
-    private Dictionary<string, string> variables = new Dictionary<string, string>();
+    private Dictionary<string, object> variables = new Dictionary<string, object>();
 
     // Start is called before the first frame update
     void Start()
@@ -61,6 +61,14 @@ public class IDEScript : MonoBehaviour
                         variableValue = variableValue.Trim('\"'); // remove quotes
                         variables[variableName] = variableValue; // store variable in dictionary
                     }
+
+                    // check if value is a number
+                    else if (float.TryParse(variableValue, out float numberValue))
+                    {
+                        variables[variableName] = numberValue;
+                    }
+                    
+                    // Error         
                     else
                     {
                         output += $"Error: Invalid value for variable \"{variableName}\".\n";
