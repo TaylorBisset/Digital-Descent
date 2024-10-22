@@ -27,6 +27,13 @@ public class IDEScript : MonoBehaviour
         idePanel.SetActive(false);  // Hides the Settings Menu
     }
 
+    public void PrintFunctionVariableButton()
+    {
+        // when button is pressed, print function is added to the user input field
+        inputField.text += "\nmessage = \"\"\nprint(message)";
+        
+    }
+
     public void ExecuteCode()
     {
         // Get text from the input field
