@@ -28,6 +28,12 @@ public class IDEScript : MonoBehaviour
     {
         idePanel.SetActive(false);  // Hides the Settings Menu
     }
+
+    public void ClearButton()
+    {
+        inputField.text = string.Empty;
+    }
+
     public void ExecuteCode()
     {
         // Get text from the input field
