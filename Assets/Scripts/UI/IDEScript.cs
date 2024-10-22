@@ -11,6 +11,9 @@ public class IDEScript : MonoBehaviour
     public TMP_InputField inputField;   // Reference IDE Input Field
     public TMP_Text outputText;   // Reference IDE output text
 
+    // dictionary to hold variables
+    private Dictionary<string, string> variables = new Dictionary<string, string>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,7 +46,26 @@ public class IDEScript : MonoBehaviour
         // Process each line of input
         foreach (string line in userInputLines)
         {
-            if (line.StartsWith("print(") && line.EndsWith(")"))    // check for print()
+            // check for variables
+            if (line.Contains("=")) // handle variable assignment
+            {
+                string[] parts = line.Split('=');   // create dictionary for variable assignment
+                if (parts.Length == 2)
+                {
+                    string variableName = parts[0]; // variable name
+                    string variableValue = parts[1]; // variable value
+
+                    // check if value is a string
+                    if (variableValue.StartsWith("\"") && variableValue.EndsWith("\""))
+                    {
+                        variableName = variableValue.Trim('\"'); // remove quotes
+                        variables[variableName] = variableValue; // store variable in dictionary
+                    }
+                }
+            }
+
+            // check for print()
+            else if (line.StartsWith("print(") && line.EndsWith(")"))    // check for print()
             {
                 // Extract the content inside the print() command
                 string content = line.Substring(6, line.Length - 7).Trim(); // Trim the starting 'print(' and the ending ')'
@@ -58,6 +80,8 @@ public class IDEScript : MonoBehaviour
                 output += "Error: Invalid format or command.\n";
             }
         }
+
+        // output to output text field
         outputText.text = output.Trim();
     }
 
