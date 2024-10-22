@@ -52,14 +52,18 @@ public class IDEScript : MonoBehaviour
                 string[] parts = line.Split('=');   // create dictionary for variable assignment
                 if (parts.Length == 2)
                 {
-                    string variableName = parts[0]; // variable name
-                    string variableValue = parts[1]; // variable value
+                    string variableName = parts[0].Trim(); // variable name
+                    string variableValue = parts[1].Trim(); // variable value
 
                     // check if value is a string
                     if (variableValue.StartsWith("\"") && variableValue.EndsWith("\""))
                     {
                         variableName = variableValue.Trim('\"'); // remove quotes
                         variables[variableName] = variableValue; // store variable in dictionary
+                    }
+                    else
+                    {
+                        output += $"Error: Invalid value for variable {variableName}\n";
                     }
                 }
             }
@@ -70,11 +74,20 @@ public class IDEScript : MonoBehaviour
                 // Extract the content inside the print() command
                 string content = line.Substring(6, line.Length - 7).Trim(); // Trim the starting 'print(' and the ending ')'
 
-                if (content.StartsWith("\"") && content.EndsWith("\"")) // Check if the user's content is a string
+                if (content.StartsWith("\"") && content.EndsWith("\"")) // Check for string literal
                 {
                     output += content.Trim('\"') + "\n";    // Output the string directly by removing the quotes
                 }
+                else if (variables.ContainsKey(content))
+                {
+                    output += variables[content] + "\n"; // Output variable value
+                }
+                else
+                {
+                    output += $"Error: Undefined variable {content}\n";
+                }
             }
+
             else
             {
                 output += "Error: Invalid format or command.\n";
