@@ -46,8 +46,13 @@ public class IDEScript : MonoBehaviour
         // Process each line of input
         foreach (string line in userInputLines)
         {
+            if (string.IsNullOrEmpty(line))
+            {
+            continue; // move to next line if this line is empty
+            }
+
             // check for variables
-            if (line.Contains("=")) // handle variable assignment
+            else if (line.Contains("=")) // handle variable assignment
             {
                 string[] parts = line.Split('=');   // create dictionary for variable assignment
                 if (parts.Length == 2)
