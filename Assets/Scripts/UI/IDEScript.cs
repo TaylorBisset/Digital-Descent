@@ -54,90 +54,93 @@ public class IDEScript : MonoBehaviour
         {
             if (string.IsNullOrEmpty(line))
             {
-            continue; // move to next line if this line is empty
+            continue; // skip empty lines
             }
 
-            // check for variables
-            else if (line.Contains("=")) // handle variable assignment
-            {
-                string[] parts = line.Split('=');   // create dictionary for variable assignment
-                if (parts.Length == 2)
-                {
-                    string variableName = parts[0].Trim(); // variable name, trim spaces
-                    string variableValue = parts[1].Trim(); // variable value, trim spaces
-
-                    // check if value is a string
-                    if (variableValue.StartsWith("\"") && variableValue.EndsWith("\""))
-                    {
-                        variableValue = variableValue.Trim('\"'); // remove quotes
-                        variables[variableName] = variableValue; // store variable in dictionary
-                    }
-
-                    // check if value is a number
-                    else if (float.TryParse(variableValue, out float numberValue))
-                    {
-                        variables[variableName] = numberValue;
-                    }
-                    
-                    // Error         
-                    else
-                    {
-                        output += $"Error: Invalid value for variable \"{variableName}\".\n";
-                    }
-                }
-                else
-                {
-                    output += "Error: Invalid assignment format.\n";
-                }
-            }
-
-            // check for print()
-            else if (line.StartsWith("print(") && line.EndsWith(")"))    // check for print()
-            {
-                // Extract the content inside the print() command
-                string content = line.Substring(6, line.Length - 7).Trim(); // Trim the starting 'print(' and the ending ')'
-
-                if (content.StartsWith("\"") && content.EndsWith("\"")) // Check for string literal
-                {
-                    output += content.Trim('\"') + "\n";    // Output the string directly by removing the quotes
-                }
-
-                else if (variables.ContainsKey(content))
-                {
-                    output += variables[content] + "\n"; // Output variable value
-                }
-
-                else
-                {
-                    output += $"Error: Undefined variable \"{content}\".\n";
-                }
-            }
-
-            else
-            {
-                output += "Error: Invalid format or command.\n";
-            }
+            // process lines and combine for output
+            string result = ProcessLine(line);
+            output += result +"\n";
         }
 
         // output to output text field
         outputText.text = output.Trim();
     }
 
-    // - - - - - Execute Helper Methods - - - - - //
+    // - - - - - ExecuteCode Helper Methods - - - - - //
 
     private string ProcessLine(string line)
     {
+        // check for print()
+        if (line.Contains("="))
+        {
+            return HandleVariableAssignment(line);
+        }
 
+        else if (line.StartsWith("print(") && line.EndsWith(")"))
+        {
+            return HandlePrintCommand(line);
+        }
+
+        else
+        {
+            return "Error: Invalid format or command.\n";
+        }
     }
 
     private string HandleVariableAssignment(string line)
     {
+        // check for variables
+        string[] parts = line.Split('=');   // create dictionary for variable assignment
+        
+        if (parts.Length != 2)
+        {
+            return "Error: Invalid assignment format.\n";
+        }
 
+        string variableName = parts[0].Trim(); // variable name, trim spaces
+        string variableValue = parts[1].Trim(); // variable value, trim spaces
+
+        // check if value is a string
+        if (variableValue.StartsWith("\"") && variableValue.EndsWith("\""))
+        {
+            variableValue = variableValue.Trim('\"'); // remove quotes
+            variables[variableName] = variableValue; // store variable in dictionary
+            return $"Variable \"{variableName}\" set to \"{variableValue}\".";
+        }
+
+        // check if value is a number
+        else if (float.TryParse(variableValue, out float numberValue))
+        {
+            variables[variableName] = numberValue;
+            return $"Variable \"{variableName}\" set to \"{numberValue}\".";
+        }
+
+        // Error         
+        else
+        {
+            return $"Error: Invalid value for variable \"{variableName}\".\n";
+        }
     }
 
     private string HandlePrintCommand(string line)
     {
+        // Extract the content inside the print() command
+        string content = line.Substring(6, line.Length - 7).Trim(); // Trim the starting 'print(' and the ending ')'
 
+        if (content.StartsWith("\"") && content.EndsWith("\"")) // Check for string literal
+        {
+            return content.Trim('\"') + "\n";    // Output the string directly by removing the quotes
+        }
+
+        else if (variables.ContainsKey(content))
+        {
+            return variables[content] + "\n"; // Output variable value
+        }
+
+        else
+        {
+            return $"Error: Undefined variable \"{content}\".\n";
+        }
     }
 
     // - - - - - Library - - - - - //
