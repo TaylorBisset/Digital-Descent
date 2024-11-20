@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -70,12 +71,19 @@ public class IDEScript : MonoBehaviour
 
     private string ProcessLine(string line)
     {
-        // check for print()
-        if (line.Contains("="))
+        // check for while loop
+        if (line.StartsWith("while"))
+        {
+            return HandleWhileLoop(line);
+        }
+
+        // check for variable
+        else if (line.Contains("="))
         {
             return HandleVariableAssignment(line);
         }
 
+        // check for print()
         else if (line.StartsWith("print(") && line.EndsWith(")"))
         {
             return HandlePrintCommand(line);
@@ -85,6 +93,63 @@ public class IDEScript : MonoBehaviour
         {
             return "Error: Invalid format or command.\n";
         }
+    }
+
+    private string HandleWhileLoop(string line)
+    {
+        string condition = line.Substring(6).Trim(); // remove "while "
+
+        string output = "";
+
+        while (EvaluateCondition(condition))
+        {
+
+        }
+
+        return output.Trim();
+    }
+
+    private bool EvaluateCondition(string condition)
+    {
+        // working example:
+        // while (i < 5)
+        string[] parts = condition.Split(' ');
+
+        if (parts.Length != 3)
+        {
+            throw new System.Exception("Invalid condition format.");
+        }
+
+        string variableName = parts[0]; // i
+        string operatorType = parts[1]; // <
+        string value = parts[2];        // 5
+
+        // get variable value for comparison
+        float variableValue = Convert.ToSingle(variables[variableName]); // variable value
+        float compareValue = float.Parse(value); // value to compare agaisnt
+
+        // perform comparison based on the operator
+        switch (operatorType)
+        {
+            case "<":
+                return variableValue < compareValue;
+            case "<=":
+                return variableValue <= compareValue;
+            
+            case ">":
+                return variableValue > compareValue;
+            case ">=":
+                return variableValue >= compareValue;
+           
+            case "==":
+                return variableValue == compareValue;
+            case "!=":
+                return variableValue != compareValue;
+            default:
+                // if not recognized, throw error
+                throw new System.Exception($"Invalid operator: {operatorType}");
+        }
+
     }
 
     private string HandleVariableAssignment(string line)
