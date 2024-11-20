@@ -25,7 +25,9 @@ public class IDEScript : MonoBehaviour
         idePanel.SetActive(true);   // Shows the Settings Menu
     }
 
+
     // - - - - - Banner - - - - - //
+
 
     public void CloseIDE() 
     {
@@ -36,6 +38,10 @@ public class IDEScript : MonoBehaviour
     {
         inputField.text = string.Empty;
     }
+
+
+    // - - - - - Code Execution - - - - - //
+
 
     public void ExecuteCode()
     {
@@ -117,7 +123,25 @@ public class IDEScript : MonoBehaviour
         outputText.text = output.Trim();
     }
 
+    // - - - - - Execute Helper Methods - - - - - //
+
+    private string ProcessLine(string line)
+    {
+
+    }
+
+    private string HandleVariableAssignment(string line)
+    {
+
+    }
+
+    private string HandlePrintCommand(string line)
+    {
+
+    }
+
     // - - - - - Library - - - - - //
+
 
     public void PrintFunctionButton()
     {
