@@ -190,20 +190,6 @@ public class IDEScript : MonoBehaviour
 
     }
 
-    private string ExecuteLoopBody(string loopBody)
-    {
-        // split the loop body in individual lines
-        string[] lines = loopBody.Split('\n');
-        string output = "";
-
-        foreach (string line in lines)
-        {
-            output += ProcessLine(line) + "\n"; // ProcessLine and append output using recursion
-        }
-
-        return output.Trim();
-    }
-
     private string HandleVariableAssignment(string line)
     {
         // check for variables
