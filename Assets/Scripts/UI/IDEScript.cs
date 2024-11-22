@@ -52,21 +52,51 @@ public class IDEScript : MonoBehaviour
         string[] userInputLines = inputField.text.Trim().Split('\n');   // split input into lines
         string output = ""; // Initialize an empty string for output
 
-        // Process each line of input
-        foreach (string line in userInputLines)
+        // use `while` loop to account for multi-line constructions
+        int i = 0;
+        while (i < userInputLines.Length)
         {
+            string line = userInputLines[i].Trim(); // trim leading or trailing whitespace
+
             if (string.IsNullOrEmpty(line))
             {
-            continue; // skip empty lines
+                continue; // skip empty lines
             }
 
-            // process lines and combine for output
+            // check for while loop
+            if (line.StartsWith("while"))
+            {
+                // extract conditon of loop
+                string condition = line.Substring(6).Trim(); // remove 'while' from line
+
+                // collect body of loop
+                List<string> loopBody = new List<string>();
+
+                // move to next line
+                i++;
+
+                // loop through to the end of the `while` loop body
+                while (i < userInputLines.Length && !string.IsNullOrEmpty(userInputLines[i]))
+                {
+                    loopBody.Add(userInputLines[i]); // Add line to loop body
+                    i++;
+                }
+
+                // execute the `while` loop
+                string loopOutput = HandleWhileLoop(condition);
+                output += loopBody + "\n";
+
+                // continue with the rest of code (loop finished, move on)
+                continue;
+            }
+
+            // if not in a loop, process as single-line command
             string result = ProcessLine(line);
-            output += result +"\n";
+            output += result + "\n";
         }
 
-        // output to output text field
-        outputText.text = output.Trim();
+            // output to output text field
+            outputText.text = output.Trim();
     }
 
     // - - - - - ExecuteCode Helper Methods - - - - - //
