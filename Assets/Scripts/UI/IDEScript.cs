@@ -110,6 +110,11 @@ public class IDEScript : MonoBehaviour
             return HandleVariableAssignment(line);
         }
 
+        else if (line.Contains("+") || line.Contains("+") || line.Contains("+") || line.Contains("+"))
+        {
+            return HandleArithmatic(line);
+        }
+
         // check for print()
         else if (line.StartsWith("print(") && line.EndsWith(")"))
         {
@@ -245,6 +250,55 @@ public class IDEScript : MonoBehaviour
             return $"Error: Undefined variable \"{content}\".\n";
         }
     }
+
+
+    // - - - - - Arithmatic Operations - - - - - //
+
+
+    private string HandleArithmatic(string line)
+    {
+        // read the operator, split from line
+        string[] tokens = line.Split(new char[] { '+', '-', '*', '/' }, StringSplitOptions.RemoveEmptyEntries);
+        
+        // check if exactly two operands
+        if (tokens.Length == 2)
+        {
+            string var1 = tokens[0].Trim();
+            string var2 = tokens[1].Trim();
+
+            // check if variables exist
+            if (variables.ContainsKey(var1) && variables.ContainsKey(var2))
+            {
+                // if operands are variables, convert to their assigned values
+                float val1 = Convert.ToSingle(variables[var1]);
+                float val2 = Convert.ToSingle(variables[var2]);
+
+                // perform arithmatic based on the operator
+                if (line.Contains("+"))
+                {
+                    return (val1 + val2).ToString(); // Addition
+                }
+
+                else if (line.Contains("-"))
+                {
+                    return (val1 - val2).ToString(); // Subtraction
+                }
+
+                else if (line.Contains('*'))
+                {
+                    return (val1 * val2).ToString(); // Multiplication
+                }
+
+                else if (line.Contains('/'))
+                {
+                    return (val1 / val2).ToString(); // Division
+                }
+            }
+        }
+
+        return "Error: Invalid arithmatic operation.";
+    }
+
 
     // - - - - - Library - - - - - //
 
