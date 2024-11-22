@@ -3,6 +3,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -50,7 +52,7 @@ public class IDEScript : MonoBehaviour
     {
         // Get text from the input field
         string[] userInputLines = inputField.text.Trim().Split('\n');   // split input into lines
-        string output = ""; // Initialize an empty string for output
+        StringBuilder output = new StringBuilder(); // Initialize new StringBuilder instance to construct outputs
 
         // use `while` loop to account for multi-line constructions
         int i = 0;
@@ -68,35 +70,34 @@ public class IDEScript : MonoBehaviour
             {
                 // extract conditon of loop
                 string condition = line.Substring(6).Trim(); // remove 'while' from line
-
                 // collect body of loop
                 List<string> loopBody = new List<string>();
-
                 // move to next line
                 i++;
 
                 // loop through to the end of the `while` loop body
                 while (i < userInputLines.Length && !string.IsNullOrEmpty(userInputLines[i]))
                 {
-                    loopBody.Add(userInputLines[i]); // Add line to loop body
+                    loopBody.Add(userInputLines[i].Trim()); // Add line to loop body
                     i++;
                 }
 
                 // execute the `while` loop
-                string loopOutput = HandleWhileLoop(condition);
-                output += loopBody + "\n";
-
-                // continue with the rest of code (loop finished, move on)
-                continue;
+                string loopOutput = HandleWhileLoop(condition, loopBody); 
+                output.AppendLine(loopOutput);
             }
 
-            // if not in a loop, process as single-line command
-            string result = ProcessLine(line);
-            output += result + "\n";
+            else
+            {
+                // if not in a loop, process as single-line command
+                string result = ProcessLine(line);
+                output.AppendLine(result);
+                i++;
+            }
         }
 
             // output to output text field
-            outputText.text = output.Trim();
+            outputText.text = output.ToString().Trim();
     }
 
     // - - - - - ExecuteCode Helper Methods - - - - - //
@@ -106,7 +107,7 @@ public class IDEScript : MonoBehaviour
         // check for while loop
         if (line.StartsWith("while"))
         {
-            return HandleWhileLoop(line);
+            return HandleWhileLoop(line); 
         }
 
         // check for variable
@@ -127,10 +128,9 @@ public class IDEScript : MonoBehaviour
         }
     }
 
-    private string HandleWhileLoop(string line)
+    private string HandleWhileLoop(string line, string loopBody)
     {
         string condition = line.Substring(6).Trim(); // remove "while " from the line
-        string loopBody = "";   // store teh body of the loop
 
         int maxIterations = 500; // Prevent infinite loop
         int iterationCount = 0;
