@@ -50,6 +50,13 @@ public class IDEScript : MonoBehaviour
 
     public void ExecuteCode()
     {
+        // check for empty input
+        if (string.IsNullOrEmpty(outputText.text))
+        {
+            outputText.text = "No code to execute.";
+            return;
+        }
+
         // Get text from the input field
         string[] userInputLines = inputField.text.Trim().Split('\n');   // split input into lines
         StringBuilder output = new StringBuilder(); // Initialize new StringBuilder instance to construct outputs
