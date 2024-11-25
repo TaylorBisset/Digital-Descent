@@ -47,9 +47,15 @@ public class IDEScript : MonoBehaviour
 
     // - - - - - Code Execution - - - - - //
 
+    // add maximum execution time
+    private float globalTimeout = 5f; // 5 seconds
+    private float startTime; // time when execution starts
 
     public void ExecuteCode()
     {
+        // start execution timer
+        startTime = Time.time;
+
         // check for empty input
         if (string.IsNullOrEmpty(outputText.text))
         {
@@ -101,8 +107,14 @@ public class IDEScript : MonoBehaviour
                 output.AppendLine(result);
                 i++;
             }
-        }
 
+            // check for timeout
+            if (Time.time - startTime > globalTimeout)
+            {
+                outputText.text = "Error: Execution timeout exceeded.";
+                return;
+            }
+        }
             // output to output text field
             outputText.text = output.ToString().Trim();
     }
@@ -134,10 +146,8 @@ public class IDEScript : MonoBehaviour
         }
     }
 
-    private string HandleWhileLoop(string line, List<string> loopBody)
+    private string HandleWhileLoop(string condition, List<string> loopBody)
     {
-        string condition = line.Substring(6).Trim(); // remove "while " from the line
-
         int maxIterations = 500; // Prevent infinite loop
         int iterationCount = 0;
 
@@ -152,11 +162,17 @@ public class IDEScript : MonoBehaviour
                 return "Error: Infinite loop detected.";
             }
 
-            foreach (string iteration in loopBody)
+            foreach (string line in loopBody)
             {
                 string result = ProcessLine(line);
                 // execute loop and append output
-                output.AppendLine(line);
+                output.AppendLine(result);
+
+                // check for timeout duration
+                if (Time.time - startTime > globalTimeout)
+                {
+                    return "Error: Execution timeout exceeded.";
+                }
 
                 // check if loop condition has changed to prevent infinite loops
                 if (!EvaluateCondition(condition))
