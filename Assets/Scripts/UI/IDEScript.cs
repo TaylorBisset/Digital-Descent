@@ -145,10 +145,19 @@ public class IDEScript : MonoBehaviour
                 return "Error: Infinite loop detected.";
             }
 
-            // execute loop and append output
-            output.AppendLine(ProcessLine(line));
-        }
+            foreach (string iteration in loopBody)
+            {
+                string result = ProcessLine(line);
+                // execute loop and append output
+                output.AppendLine(line);
 
+                // check if loop condition has changed to prevent infinite loops
+                if (!EvaluateCondition(condition))
+                {
+                    break;
+                }
+            }
+        }
         return output.ToString().Trim(); // return the accumulated output from loop
     }
 
